@@ -1,5 +1,15 @@
 import React from 'react';
 import { FileText, Download, Share2 } from 'lucide-react';
+import ReportPreview from './ReportPreview';
+import { 
+  generateExecutiveSummary, 
+  generateDetailedEmissionReport, 
+  generateComplianceReport, 
+  generateCarbonNeutralityPlan,
+  generateCSVExport,
+  generateJSONExport,
+  downloadFile
+} from '../utils/reportGenerator';
 
 const Reports = ({
   emissionResults,
@@ -8,9 +18,117 @@ const Reports = ({
   workforce,
   annualProduction
 }) => {
+  const [previewData, setPreviewData] = React.useState({
+    isOpen: false,
+    title: '',
+    content: '',
+    downloadAction: () => {}
+  });
+
+  const getReportData = () => ({
+    emissionResults,
+    carbonSinkCapacity,
+    neutralityGap,
+    workforce,
+    annualProduction,
+    timestamp: new Date().toLocaleString('en-IN', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    })
+  });
+
+  const showPreview = (type) => {
+    const reportData = getReportData();
+    let content = '';
+    let title = '';
+
+    switch (type) {
+      case 'executive':
+        content = generateExecutiveSummary(reportData);
+        title = 'Executive Summary';
+        break;
+      case 'detailed':
+        content = generateDetailedEmissionReport(reportData);
+        title = 'Detailed Emission Report';
+        break;
+      case 'compliance':
+        content = generateComplianceReport(reportData);
+        title = 'Compliance Report';
+        break;
+      case 'neutrality':
+        content = generateCarbonNeutralityPlan(reportData);
+        title = 'Carbon Neutrality Plan';
+        break;
+      default:
+        return;
+    }
+
+    setPreviewData({
+      isOpen: true,
+      title,
+      content,
+      downloadAction: () => generateReport(type)
+    });
+  };
+
   const generateReport = (type) => {
-    // In a real application, this would generate and download actual reports
-    console.log(`Generating ${type} report...`);
+    const reportData = getReportData();
+    const timestamp = new Date().toISOString().split('T')[0];
+
+    switch (type) {
+      case 'executive':
+        downloadFile(
+          generateExecutiveSummary(reportData),
+          `Executive_Summary_${timestamp}.txt`
+        );
+        break;
+      case 'detailed':
+        downloadFile(
+          generateDetailedEmissionReport(reportData),
+          `Detailed_Emission_Report_${timestamp}.txt`
+        );
+        break;
+      case 'compliance':
+        downloadFile(
+          generateComplianceReport(reportData),
+          `Compliance_Report_${timestamp}.txt`
+        );
+        break;
+      case 'neutrality':
+        downloadFile(
+          generateCarbonNeutralityPlan(reportData),
+          `Carbon_Neutrality_Plan_${timestamp}.txt`
+        );
+        break;
+      case 'csv-export':
+        downloadFile(
+          generateCSVExport(reportData),
+          `Carbon_Footprint_Data_${timestamp}.csv`,
+          'text/csv'
+        );
+        break;
+      case 'excel-export':
+        downloadFile(
+          generateCSVExport(reportData),
+          `Carbon_Footprint_Data_${timestamp}.csv`,
+          'application/vnd.ms-excel'
+        );
+        break;
+      case 'json-export':
+        downloadFile(
+          generateJSONExport(reportData),
+          `Carbon_Footprint_Data_${timestamp}.json`,
+          'application/json'
+        );
+        break;
+      default:
+        break;
+    }
+
+    setPreviewData(prev => ({ ...prev, isOpen: false }));
   };
 
   const reportTypes = [
@@ -131,14 +249,14 @@ const Reports = ({
                   <div className="flex space-x-2 mt-4">
                     <button
                       onClick={() => generateReport(report.id)}
-                      className="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 transition-colors duration-200"
+                      className="inline-flex items-center px-3 py-1.5 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 transition-colors duration-200 font-medium"
                     >
                       <Download className="h-4 w-4 mr-1" />
                       Download
                     </button>
                     <button
-                      onClick={() => generateReport(`${report.id}-preview`)}
-                      className="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-md hover:bg-gray-200 transition-colors duration-200"
+                      onClick={() => showPreview(report.id)}
+                      className="inline-flex items-center px-3 py-1.5 bg-gray-100 text-gray-700 text-sm rounded-md hover:bg-gray-200 transition-colors duration-200 font-medium"
                     >
                       Preview
                     </button>
@@ -244,6 +362,15 @@ const Reports = ({
           </div>
         </div>
       </div>
+
+      {/* Report Preview Modal */}
+      <ReportPreview
+        isOpen={previewData.isOpen}
+        onClose={() => setPreviewData(prev => ({ ...prev, isOpen: false }))}
+        title={previewData.title}
+        content={previewData.content}
+        onDownload={previewData.downloadAction}
+      />
     </div>
   );
 };
