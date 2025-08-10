@@ -1,11 +1,12 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
 import { EMISSION_FACTORS, CARBON_ABSORPTION_RATES } from '../data/constants';
+import { useLocalStorage } from './useLocalStorage';
 
 export const useCalculations = () => {
-  const [activities, setActivities] = useState({});
-  const [sinks, setSinks] = useState([]);
-  const [workforce, setWorkforce] = useState(1000);
-  const [annualProduction, setAnnualProduction] = useState(1);
+  const [activities, setActivities] = useLocalStorage('carbon-footprint-activities', {});
+  const [sinks, setSinks] = useLocalStorage('carbon-footprint-sinks', []);
+  const [workforce, setWorkforce] = useLocalStorage('carbon-footprint-workforce', 1000);
+  const [annualProduction, setAnnualProduction] = useLocalStorage('carbon-footprint-annual-production', 1);
 
   const emissionResults = useMemo(() => {
     let totalEmissions = 0;

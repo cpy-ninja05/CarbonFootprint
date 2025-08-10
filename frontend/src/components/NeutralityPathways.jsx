@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Route, TrendingUp, DollarSign, Clock, CheckCircle } from 'lucide-react';
+import React from 'react';
+import { Route, TrendingUp, DollarSign, Clock, CheckCircle, Save } from 'lucide-react';
 import { CLEAN_TECHNOLOGIES, AFFORESTATION_SPECIES, CARBON_CREDIT_RATES } from '../data/constants';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const NeutralityPathways = ({
   emissionResults,
@@ -8,8 +9,8 @@ const NeutralityPathways = ({
   neutralityGap,
   calculateTechnologyImpact
 }) => {
-  const [selectedTechnologies, setSelectedTechnologies] = useState([]);
-  const [afforestationPlan, setAfforestationPlan] = useState({
+  const [selectedTechnologies, setSelectedTechnologies] = useLocalStorage('carbon-footprint-selected-technologies', []);
+  const [afforestationPlan, setAfforestationPlan] = useLocalStorage('carbon-footprint-afforestation-plan', {
     species: 'eucalyptus',
     area: 0
   });
@@ -67,9 +68,15 @@ const NeutralityPathways = ({
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-md p-6">
-        <div className="flex items-center space-x-2 mb-6">
-          <Route className="h-6 w-6 text-purple-600" />
-          <h2 className="text-xl font-semibold text-gray-900">Carbon Neutrality Pathways</h2>
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-2">
+            <Route className="h-6 w-6 text-purple-600" />
+            <h2 className="text-xl font-semibold text-gray-900">Carbon Neutrality Pathways</h2>
+          </div>
+          <div className="flex items-center space-x-2 text-green-600">
+            <Save className="h-4 w-4" />
+            <span className="text-sm font-medium">Auto-save enabled</span>
+          </div>
         </div>
 
         {/* Current Status */}

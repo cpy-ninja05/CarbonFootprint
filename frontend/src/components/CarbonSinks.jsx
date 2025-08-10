@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Plus, Trash2, TreePine } from 'lucide-react';
+import { Plus, Trash2, TreePine, Save } from 'lucide-react';
 import { CARBON_ABSORPTION_RATES } from '../data/constants';
 
 const CarbonSinks = ({ sinks, addCarbonSink, removeCarbonSink }) => {
@@ -42,11 +42,17 @@ const CarbonSinks = ({ sinks, addCarbonSink, removeCarbonSink }) => {
           <TreePine className="h-6 w-6 text-green-600" />
           <h2 className="text-xl font-semibold text-gray-900">Carbon Sinks Assessment</h2>
         </div>
-        <div className="text-right">
-          <p className="text-sm text-gray-600">Total Absorption Capacity</p>
-          <p className="text-2xl font-bold text-green-600">
-            {totalAbsorption.toLocaleString('en-IN', { maximumFractionDigits: 0 })} t CO₂e/year
-          </p>
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-2 text-green-600">
+            <Save className="h-4 w-4" />
+            <span className="text-sm font-medium">Auto-save enabled</span>
+          </div>
+          <div className="text-right">
+            <p className="text-sm text-gray-600">Total Absorption Capacity</p>
+            <p className="text-2xl font-bold text-green-600">
+              {totalAbsorption.toLocaleString('en-IN', { maximumFractionDigits: 0 })} t CO₂e/year
+            </p>
+          </div>
         </div>
       </div>
 

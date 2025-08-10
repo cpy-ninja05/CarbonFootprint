@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { TrendingUp, TrendingDown, Factory, Users, Leaf, Target } from 'lucide-react';
+import { TrendingUp, TrendingDown, Factory, Users, Leaf, Target, Save, Download, Upload, Trash2, Database } from 'lucide-react';
+import { getDataSummary, exportData, importData, clearAllData } from '../utils/dataManager';
 
 const Dashboard = ({
   emissionResults,
@@ -8,6 +9,9 @@ const Dashboard = ({
   neutralityGap,
   workforce
 }) => {
+  const [showDataManager, setShowDataManager] = useState(false);
+  const [importStatus, setImportStatus] = useState('');
+
   const categoryData = Object.entries(emissionResults.categoryBreakdown).map(([key, value]) => ({
     name: key.charAt(0).toUpperCase() + key.slice(1),
     value: value
@@ -155,6 +159,104 @@ const Dashboard = ({
           <span>0 t CO₂e</span>
           <span>{emissionResults.totalEmissions.toFixed(0)} t CO₂e</span>
         </div>
+      </div>
+
+      {/* Data Management Section */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center space-x-2">
+            <Database className="h-5 w-5 text-blue-600" />
+            <h3 className="text-lg font-semibold text-gray-900">Data Management</h3>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Save className="h-4 w-4 text-green-600" />
+            <span className="text-sm text-green-600 font-medium">Auto-save enabled</span>
+          </div>
+        </div>
+
+        <div className="mb-4">
+          <p className="text-sm text-gray-600">
+            Your data is automatically saved to your browser's local storage. This means your calculations, 
+            carbon sinks, and settings will persist when you close and reopen the website.
+          </p>
+        </div>
+
+        <div className="flex flex-wrap gap-3">
+          <button
+            onClick={() => setShowDataManager(!showDataManager)}
+            className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors duration-200"
+          >
+            <Database className="h-4 w-4 mr-2" />
+            View Data Summary
+          </button>
+
+          <button
+            onClick={exportData}
+            className="inline-flex items-center px-3 py-2 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 transition-colors duration-200"
+          >
+            <Download className="h-4 w-4 mr-2" />
+            Export Data
+          </button>
+
+          <label className="inline-flex items-center px-3 py-2 bg-purple-600 text-white text-sm rounded-md hover:bg-purple-700 transition-colors duration-200 cursor-pointer">
+            <Upload className="h-4 w-4 mr-2" />
+            Import Data
+            <input
+              type="file"
+              accept=".json"
+              onChange={async (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  try {
+                    setImportStatus('Importing...');
+                    await importData(file);
+                    setImportStatus('Data imported successfully!');
+                    setTimeout(() => setImportStatus(''), 3000);
+                    window.location.reload(); // Reload to update all components
+                  } catch (error) {
+                    setImportStatus(`Import failed: ${error.message}`);
+                    setTimeout(() => setImportStatus(''), 3000);
+                  }
+                }
+              }}
+              className="hidden"
+            />
+          </label>
+
+          <button
+            onClick={() => {
+              if (window.confirm('Are you sure you want to clear all data? This action cannot be undone.')) {
+                clearAllData();
+              }
+            }}
+            className="inline-flex items-center px-3 py-2 bg-red-600 text-white text-sm rounded-md hover:bg-red-700 transition-colors duration-200"
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Clear All Data
+          </button>
+        </div>
+
+        {importStatus && (
+          <div className={`mt-3 p-2 rounded-md text-sm ${
+            importStatus.includes('successfully') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+          }`}>
+            {importStatus}
+          </div>
+        )}
+
+        {showDataManager && (
+          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+            <h4 className="text-sm font-medium text-gray-700 mb-3">Data Summary</h4>
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+              {Object.entries(getDataSummary()).map(([key, value]) => (
+                <div key={key} className="flex justify-between">
+                  <span className="text-gray-600">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>
+                  <span className="font-medium">{value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

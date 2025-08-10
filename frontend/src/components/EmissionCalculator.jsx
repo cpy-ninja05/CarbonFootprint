@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Calculator, Info } from 'lucide-react';
+import { Calculator, Info, Save } from 'lucide-react';
 import { EMISSION_FACTORS } from '../data/constants';
 
 const EmissionCalculator = ({
@@ -27,9 +27,15 @@ const EmissionCalculator = ({
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex items-center space-x-2 mb-6">
-        <Calculator className="h-6 w-6 text-blue-600" />
-        <h2 className="text-xl font-semibold text-gray-900">Emission Calculator</h2>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center space-x-2">
+          <Calculator className="h-6 w-6 text-blue-600" />
+          <h2 className="text-xl font-semibold text-gray-900">Emission Calculator</h2>
+        </div>
+        <div className="flex items-center space-x-2 text-green-600">
+          <Save className="h-4 w-4" />
+          <span className="text-sm font-medium">Auto-save enabled</span>
+        </div>
       </div>
 
       {/* Tabs */}
