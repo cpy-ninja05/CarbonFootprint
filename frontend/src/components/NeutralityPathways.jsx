@@ -1,6 +1,5 @@
-import React from 'react';
-import { Route, TrendingUp, DollarSign, Clock, CheckCircle, Save } from 'lucide-react';
-import { CLEAN_TECHNOLOGIES, AFFORESTATION_SPECIES, CARBON_CREDIT_RATES } from '../data/constants';
+import { CheckCircle, Clock, DollarSign, Route, Save, TrendingUp } from 'lucide-react';
+import { AFFORESTATION_SPECIES, CARBON_CREDIT_RATES, CLEAN_TECHNOLOGIES } from '../data/constants';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 
 const NeutralityPathways = ({
@@ -67,7 +66,7 @@ const NeutralityPathways = ({
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-2">
             <Route className="h-6 w-6 text-purple-600" />
@@ -80,9 +79,9 @@ const NeutralityPathways = ({
         </div>
 
         {/* Current Status */}
-        <div className="bg-gray-50 rounded-lg p-4 mb-6">
+        <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-6">
           <h3 className="text-lg font-medium text-gray-900 mb-3">Current Status</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 text-center">
             <div>
               <p className="text-2xl font-bold text-red-600">
                 {emissionResults.totalEmissions.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
@@ -106,9 +105,9 @@ const NeutralityPathways = ({
       </div>
 
       {/* Clean Technologies */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Clean Technologies</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           {CLEAN_TECHNOLOGIES.map((tech) => {
             const impact = calculateTechnologyImpact(tech);
             const isSelected = selectedTechnologies.includes(tech.id);
@@ -154,10 +153,10 @@ const NeutralityPathways = ({
       </div>
 
       {/* Afforestation Planning */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Afforestation Planning</h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Tree Species
@@ -190,9 +189,9 @@ const NeutralityPathways = ({
         </div>
 
         {afforestationPlan.area > 0 && (
-          <div className="mt-4 p-4 bg-green-50 rounded-lg">
+          <div className="mt-4 p-3 sm:p-4 bg-green-50 rounded-lg">
             <h4 className="font-medium text-green-900 mb-2">Afforestation Impact</h4>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4 text-sm">
               <div>
                 <span className="text-green-700 font-medium">Trees Required:</span>
                 <div className="text-green-900">{calculateAfforestationRequirement().treesRequired.toLocaleString('en-IN')}</div>
@@ -215,11 +214,11 @@ const NeutralityPathways = ({
       </div>
 
       {/* Combined Impact Summary */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Combined Impact Summary</h3>
         
-        <div className={`p-4 rounded-lg ${combinedImpact.isNeutral ? 'bg-green-50' : 'bg-yellow-50'}`}>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+        <div className={`p-3 sm:p-4 rounded-lg ${combinedImpact.isNeutral ? 'bg-green-50' : 'bg-yellow-50'}`}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 sm:gap-4 text-center">
             <div>
               <p className="text-2xl font-bold text-blue-600">
                 -{combinedImpact.technologyReduction.toFixed(0)}
@@ -248,9 +247,9 @@ const NeutralityPathways = ({
         </div>
 
         {/* Carbon Credits Potential */}
-        <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+        <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-blue-50 rounded-lg">
           <h4 className="font-medium text-blue-900 mb-2">Carbon Credits Potential</h4>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 text-sm">
             <div>
               <span className="text-blue-700 font-medium">Emission Reduction Credits:</span>
               <div className="text-blue-900">

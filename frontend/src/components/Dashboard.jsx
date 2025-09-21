@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
-import { TrendingUp, TrendingDown, Factory, Users, Leaf, Target, Save, Download, Upload, Trash2, Database } from 'lucide-react';
-import { getDataSummary, exportData, importData, clearAllData } from '../utils/dataManager';
+import { Database, Download, Factory, Leaf, Save, Target, Trash2, TrendingDown, TrendingUp, Upload, Users } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { Bar, BarChart, CartesianGrid, Cell, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { clearAllData, exportData, getDataSummary, importData } from '../utils/dataManager';
 
 const Dashboard = ({
   emissionResults,
@@ -25,10 +25,21 @@ const Dashboard = ({
 
   const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
 
+  // Responsive tick angle for XAxis
+  const [xAxisAngle, setXAxisAngle] = useState(0);
+  useEffect(() => {
+    const handleResize = () => {
+      setXAxisAngle(window.innerWidth < 640 ? 45 : 0); // 45deg for <sm screens
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
     <div className="space-y-6">
       {/* Key Metrics Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -87,15 +98,29 @@ const Dashboard = ({
       </div>
 
       {/* Charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Emissions by Category */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Emissions by Category</h3>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={categoryData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-              <YAxis tick={{ fontSize: 12 }} />
+              <XAxis
+                dataKey="name"
+                tick={{
+                  fontSize: 12,
+                  angle: xAxisAngle,
+                  textAnchor: xAxisAngle ? 'start' : 'middle',
+                  wordBreak: 'break-all',
+                  overflowWrap: 'anywhere'
+                }}
+                interval={0}
+                height={xAxisAngle ? 70 : 30}
+              />
+              <YAxis
+                tick={{ fontSize: 10 }}
+                width={25}
+              />
               <Tooltip formatter={(value) => [`${Number(value).toFixed(1)} t CO₂e`, 'Emissions']} />
               <Bar dataKey="value" fill="#3b82f6" radius={[4, 4, 0, 0]} />
             </BarChart>
@@ -126,7 +151,7 @@ const Dashboard = ({
       </div>
 
       {/* Carbon Neutrality Status */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900">Carbon Neutrality Progress</h3>
           <div className="flex items-center space-x-2">
@@ -162,7 +187,7 @@ const Dashboard = ({
       </div>
 
       {/* Data Management Section */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-2">
             <Database className="h-5 w-5 text-blue-600" />
@@ -181,7 +206,7 @@ const Dashboard = ({
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2 sm:gap-3">
           <button
             onClick={() => setShowDataManager(!showDataManager)}
             className="inline-flex items-center px-3 py-2 bg-blue-600 text-white text-sm rounded-md hover:bg-blue-700 transition-colors duration-200"
@@ -245,9 +270,9 @@ const Dashboard = ({
         )}
 
         {showDataManager && (
-          <div className="mt-4 p-4 bg-gray-50 rounded-lg">
+          <div className="mt-4 p-2 sm:p-4 bg-gray-50 rounded-lg">
             <h4 className="text-sm font-medium text-gray-700 mb-3">Data Summary</h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 text-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-3 text-sm">
               {Object.entries(getDataSummary()).map(([key, value]) => (
                 <div key={key} className="flex justify-between">
                   <span className="text-gray-600">{key.replace(/([A-Z])/g, ' $1').trim()}:</span>

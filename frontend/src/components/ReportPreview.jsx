@@ -1,5 +1,4 @@
-import React from 'react';
-import { X, Download } from 'lucide-react';
+import { Download, X } from 'lucide-react';
 
 // interface ReportPreviewProps {
 //   isOpen: boolean;
@@ -19,10 +18,10 @@ const ReportPreview=({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] flex flex-col">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-2 sm:p-4">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-lg sm:max-w-4xl max-h-[90vh] flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-900">{title} - Preview</h2>
           <div className="flex items-center space-x-2">
             <button
@@ -42,7 +41,7 @@ const ReportPreview=({
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-auto p-6">
+        <div className="flex-1 overflow-auto p-4 sm:p-6">
           <div className="bg-gray-50 rounded-lg p-4 border">
             <pre className="whitespace-pre-wrap text-sm text-gray-800 font-mono leading-relaxed">
               {content}
@@ -51,7 +50,7 @@ const ReportPreview=({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-between p-6 border-t border-gray-200 bg-gray-50">
+        <div className="flex flex-col sm:flex-row items-center justify-between p-4 sm:p-6 border-t border-gray-200 bg-gray-50 gap-2">
           <div className="text-sm text-gray-600">
             Preview shows the complete report content that will be downloaded
           </div>

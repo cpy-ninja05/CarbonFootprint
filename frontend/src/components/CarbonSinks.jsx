@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Plus, Trash2, TreePine, Save } from 'lucide-react';
+import { Plus, Save, Trash2, TreePine } from 'lucide-react';
+import { useState } from 'react';
 import { CARBON_ABSORPTION_RATES } from '../data/constants';
 
 const CarbonSinks = ({ sinks, addCarbonSink, removeCarbonSink }) => {
@@ -36,18 +36,18 @@ const CarbonSinks = ({ sinks, addCarbonSink, removeCarbonSink }) => {
   const totalAbsorption = sinks.reduce((total, sink) => total + calculateActualAbsorption(sink), 0);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex items-center justify-between mb-6">
+    <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row items-center sm:items-center justify-between mb-6 gap-4">
         <div className="flex items-center space-x-2">
           <TreePine className="h-6 w-6 text-green-600" />
           <h2 className="text-xl font-semibold text-gray-900">Carbon Sinks Assessment</h2>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex flex-col sm:flex-row items-center sm:space-x-4 gap-2 sm:gap-0 w-full sm:w-auto">
           <div className="flex items-center space-x-2 text-green-600">
             <Save className="h-4 w-4" />
             <span className="text-sm font-medium">Auto-save enabled</span>
           </div>
-          <div className="text-right">
+          <div className="text-center sm:text-right">
             <p className="text-sm text-gray-600">Total Absorption Capacity</p>
             <p className="text-2xl font-bold text-green-600">
               {totalAbsorption.toLocaleString('en-IN', { maximumFractionDigits: 0 })} t CO₂e/year
@@ -57,7 +57,7 @@ const CarbonSinks = ({ sinks, addCarbonSink, removeCarbonSink }) => {
       </div>
 
       {/* Add New Sink Button */}
-      <div className="mb-6">
+      <div className="mb-6 flex justify-center sm:justify-start">
         <button
           onClick={() => setShowForm(!showForm)}
           className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors duration-200"
@@ -69,9 +69,9 @@ const CarbonSinks = ({ sinks, addCarbonSink, removeCarbonSink }) => {
 
       {/* Add Sink Form */}
       {showForm && (
-        <div className="bg-gray-50 rounded-lg p-4 mb-6">
+        <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-6">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Sink Type
@@ -131,7 +131,7 @@ const CarbonSinks = ({ sinks, addCarbonSink, removeCarbonSink }) => {
               </div>
             </div>
 
-            <div className="flex justify-end space-x-3">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
@@ -151,22 +151,22 @@ const CarbonSinks = ({ sinks, addCarbonSink, removeCarbonSink }) => {
       )}
 
       {/* Existing Sinks */}
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
         {sinks.length === 0 ? (
-          <div className="text-center py-8 text-gray-500">
+          <div className="col-span-full text-center py-8 text-gray-500">
             <TreePine className="h-12 w-12 mx-auto mb-3 text-gray-300" />
             <p>No carbon sinks added yet</p>
             <p className="text-sm">Add existing carbon sinks to calculate absorption capacity</p>
           </div>
         ) : (
           sinks.map((sink) => (
-            <div key={sink.id} className="border border-gray-200 rounded-lg p-4">
-              <div className="flex items-center justify-between">
+            <div key={sink.id} className="border border-gray-200 rounded-lg p-4 flex flex-col justify-between h-full">
+              <div className="flex items-center justify-between gap-2">
                 <div className="flex-1">
                   <h3 className="text-lg font-medium text-gray-900 capitalize">
                     {sink.type}
                   </h3>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-2 text-sm text-gray-600">
+                  <div className="grid grid-cols-2 md:grid-cols-2 gap-2 mt-2 text-sm text-gray-600">
                     <div>
                       <span className="font-medium">Area:</span> {sink.area} ha
                     </div>

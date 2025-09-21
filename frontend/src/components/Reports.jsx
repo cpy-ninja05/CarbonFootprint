@@ -1,15 +1,15 @@
+import { Download, FileText } from 'lucide-react';
 import React from 'react';
-import { FileText, Download, Share2 } from 'lucide-react';
-import ReportPreview from './ReportPreview';
-import { 
-  generateExecutiveSummary, 
-  generateDetailedEmissionReport, 
-  generateComplianceReport, 
+import {
+  downloadFile,
   generateCarbonNeutralityPlan,
+  generateComplianceReport,
   generateCSVExport,
-  generateJSONExport,
-  downloadFile
+  generateDetailedEmissionReport,
+  generateExecutiveSummary,
+  generateJSONExport
 } from '../utils/reportGenerator';
+import ReportPreview from './ReportPreview';
 
 const Reports = ({
   emissionResults,
@@ -160,16 +160,16 @@ const Reports = ({
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <div className="flex items-center space-x-2 mb-6">
           <FileText className="h-6 w-6 text-indigo-600" />
           <h2 className="text-xl font-semibold text-gray-900">Reports & Analytics</h2>
         </div>
 
         {/* Key Metrics Summary */}
-        <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg p-6 mb-6">
+        <div className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-lg p-4 sm:p-6 mb-6">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Report Summary</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
             <div className="text-center">
               <div className="text-2xl font-bold text-indigo-600">
                 {emissionResults.totalEmissions.toLocaleString('en-IN', { maximumFractionDigits: 0 })}
@@ -198,9 +198,9 @@ const Reports = ({
         </div>
 
         {/* Report Types */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
           {reportTypes.map((report) => (
-            <div key={report.id} className="border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
+            <div key={report.id} className="border border-gray-200 rounded-lg p-4 sm:p-6 hover:shadow-md transition-shadow duration-200">
               <div className="flex items-start space-x-3">
                 <div className="text-3xl">{report.icon}</div>
                 <div className="flex-1">
@@ -269,9 +269,9 @@ const Reports = ({
       </div>
 
       {/* Data Export Options */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Data Export</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 sm:gap-4 overflow-x-auto">
           <button
             onClick={() => generateReport('csv-export')}
             className="flex items-center justify-center px-4 py-3 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors duration-200"
@@ -308,10 +308,10 @@ const Reports = ({
       </div>
 
       {/* Benchmarking */}
-      <div className="bg-white rounded-lg shadow-md p-6">
+      <div className="bg-white rounded-lg shadow-md p-4 sm:p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Industry Benchmarking</h3>
-        <div className="space-y-4">
-          <div className="bg-gray-50 rounded-lg p-4">
+        <div className="space-y-3 sm:space-y-4">
+          <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
             <div className="flex justify-between items-center">
               <div>
                 <h4 className="font-medium text-gray-900">Emissions per Tonne of Coal</h4>
@@ -336,7 +336,7 @@ const Reports = ({
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-4">
+          <div className="bg-gray-50 rounded-lg p-3 sm:p-4">
             <div className="flex justify-between items-center">
               <div>
                 <h4 className="font-medium text-gray-900">Per Capita Emissions</h4>
